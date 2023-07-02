@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Website</title>
+<link rel="shortcut icon" href="img/Sun.png" type="image/x-icon">
+  <style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        width: 100%;
+        height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      background-color: rgb(13, 13, 79);
+    }
+    #quiz-container{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        padding: 30px ;
+    }
+    
+    .container h1 {
+      color: white
+    }
+    
+    .question {
+        font-size: 20px;
+        color: rgb(13, 13, 79);
+      margin-bottom: 20px;
+    }
+    
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    
+    #submit-btn {
+      display: block;
+      margin-top: 20px;
+      width: 150px;
+      padding: 10px;
+      background: #001e4d;
+      color: #fff;
+      border: 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <div class="container">
+  <h1>Simple Quiz</h1>
+
+  <div id="quiz-container">
+  <strong><div id="question-container" class="question"></div></strong>
+    <div id="options-container" class="options"></div>
+    <button id="submit-btn">Submit</button>
+  </div>
+</div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is the capital of France?",
+        options: ["Paris", "London", "Berlin", "Madrid"],
+        answer: "Paris"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Mars", "Jupiter", "Venus", "Mercury"],
+        answer: "Mars"
+      },
+      {
+        question: "What is the largest organ in the human body?",
+        options: ["Heart", "Brain", "Liver", "Skin"],
+        answer: "Skin"
+      }
+    ];
+
+    const questionContainer = document.getElementById('question-container');
+    const optionsContainer = document.getElementById('options-container');
+    const submitButton = document.getElementById('submit-btn');
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const quizQuestion = quizData[currentQuestion];
+      questionContainer.textContent = quizQuestion.question;
+      optionsContainer.innerHTML = '';
+
+      quizQuestion.options.forEach(option => {
+        const optionElement = document.createElement('label');
+        optionElement.innerHTML = `<input type="radio" name="option" value="${option}"> ${option}`;
+        optionsContainer.appendChild(optionElement);
+      });
+    }
+
+    function checkAnswer() {
+      const selectedOption = document.querySelector('input[name="option"]:checked');
+
+      if (selectedOption) {
+        const userAnswer = selectedOption.value;
+        if (userAnswer === quizData[currentQuestion].answer) {
+          score++;
+        }
+
+        currentQuestion++;
+
+        if (currentQuestion < quizData.length) {
+          loadQuestion();
+        } else {
+          showResults();
+        }
+      }
+    }
+
+    function showResults() {
+      questionContainer.textContent = `Quiz completed! Your score is ${score}/${quizData.length}.`;
+      optionsContainer.innerHTML = '';
+      submitButton.style.display = 'none';
+    }
+
+    loadQuestion();
+    submitButton.addEventListener('click', checkAnswer);
+  </script>
+</body>
+</html>
